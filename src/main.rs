@@ -22,7 +22,7 @@ fn hit_sphere(center:Vec3<f32>, radius:f32, ray:Ray<f32>) -> bool {
 }
 
 fn color(r:Ray<f32>) -> Vec3<f32> {
-    if hit_sphere(Vec3::new(0.0, 1.0, -1.0), 0.5, r) {
+    if hit_sphere(Vec3::new(0.0, 0.0, -1.0), 0.5, r) {
         return Vec3::new(1.0, 0.0, 0.0);
     }
     let unit_dir = r.direction().unit_vec();
@@ -31,25 +31,25 @@ fn color(r:Ray<f32>) -> Vec3<f32> {
 }
 
 fn main() {
-    let nx:i32 = 400;
-    let ny:i32 = 200;
+    let x:i32 = 400;
+    let y:i32 = 200;
 
     let path = Path::new("image.ppm");
 
     let mut file = File::create(&path).unwrap();
 
     // Header
-    write!(file,"P3\n{} {}\n255\n",nx, ny).unwrap();
+    write!(file,"P3\n{} {}\n255\n",x, y).unwrap();
 
     let ll_corner  = Vec3::new(-2.0, -1.0, -1.0);
     let horizontal = Vec3::new( 4.0,  0.0,  0.0);
     let vertical   = Vec3::new( 0.0,  2.0,  0.0);
     let origin     = Vec3::new( 0.0,  0.0,  0.0);
 
-    for idy in (0..nx).rev() {
-        for idx in 0..ny {
-            let u = idx as f32 / nx as f32;
-            let v = idy as f32 / ny as f32;
+    for idy in (0..y).rev() {
+        for idx in 0..x {
+            let u = idx as f32 / x as f32;
+            let v = idy as f32 / y as f32;
             let r = Ray::new(origin,
                              ll_corner +
                              u * horizontal +
