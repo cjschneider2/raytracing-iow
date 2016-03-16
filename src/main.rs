@@ -8,24 +8,14 @@ use std::path::Path;
 use vec3::Vec3;
 use ray::Ray;
 
-fn hit_sphere(center:Vec3<f32>, radius:f32, ray:Ray<f32>) -> bool {
-    let oc = ray.origin() - center;
-    let a  = ray.direction().dot(ray.direction());
-    let b  = 2.0 * oc.dot(ray.direction());
-    let c  = (oc.dot(oc)) - (radius * radius);
-    let discriminant = (b * b) - (4.0 * a * c);
-    if discriminant > 0.0 {
-        true
-    } else {
-        false
+fn color(ray:Ray<f32>) -> Vec3<f32> {
+    let record = Hit::new();
+    let t = hit_sphere(Vec3::new(0.0, 0.0, -1.0), 0.5, ray);
+    if t > 0.0 {
+        let n = (ray.point_at_parameter(t) - Vec3::new(0.0, 0.0, -1.0)).unit_vector();
+        return 0.5 * Vec3::new(n.x+1.0, n.y+1.0, n.z+1.0);
     }
-}
-
-fn color(r:Ray<f32>) -> Vec3<f32> {
-    if hit_sphere(Vec3::new(0.0, 0.0, -1.0), 0.5, r) {
-        return Vec3::new(1.0, 0.0, 0.0);
-    }
-    let unit_dir = r.direction().unit_vec();
+    let unit_dir = ray.direction().unit_vector();
     let t = 0.5 * (unit_dir.y + 1.0);
     (1.0 - t) * Vec3::new(1.0, 1.0, 1.0) + ( t * Vec3::new(0.5, 0.7, 1.0))
 }

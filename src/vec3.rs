@@ -29,7 +29,7 @@ impl Vec3<f32> {
          (self.z * self.z))
     }
 
-    pub fn unit_vec(self) -> Vec3<f32> {
+    pub fn unit_vector(self) -> Vec3<f32> {
         self / self.length()
     }
 
