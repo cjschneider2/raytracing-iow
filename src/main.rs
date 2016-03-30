@@ -78,6 +78,7 @@ fn main() {
                 col = col + color(r, &mut world);
             }
             col = col / (s as f32);
+            col = Vec3::new(col.x.sqrt(), col.y.sqrt(), col.z.sqrt());
             let r:i32 = (255.99 * col.x) as i32;
             let g:i32 = (255.99 * col.y) as i32;
             let b:i32 = (255.99 * col.z) as i32;
