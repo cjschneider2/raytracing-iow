@@ -17,12 +17,24 @@ use ray::Ray;
 use sphere::Sphere;
 use camera::Camera;
 
+fn rand_in_unit_sphere() -> Vec3<f32> {
+    let v1 = Vec3::new(1.0, 1.0, 1.0);
+    let mut vr = Vec3::new(rand::random::<f32>(),
+                           rand::random::<f32>(),
+                           rand::random::<f32>()) - v1;
+    while vr.dot(vr) >= 1.0 {
+        vr = Vec3::new(rand::random::<f32>(),
+                       rand::random::<f32>(),
+                       rand::random::<f32>()) - v1;
+    }
+    vr
+}
+
 fn color<T: Hitable<f32>> (ray:Ray<f32>, world: &mut Vec<T>) -> Vec3<f32> {
     match hitable::hit_in_list(&ray, 0.0, f32::MAX, world) {
         Some(rec) => {
-            0.5 * Vec3::new(rec.normal.x + 1.0,
-                            rec.normal.y + 1.0,
-                            rec.normal.z + 1.0)
+            let target = rec.p + rec.normal + rand_in_unit_sphere();
+            0.5 * color( Ray::new(rec.p, target-rec.p), world)
         },
         None => {
             let unit_dir = ray.direction().unit_vector();
@@ -54,7 +66,7 @@ fn main() {
     for idy in (0..y).rev() {
         for idx in 0..x {
             let mut col = Vec3::new(0.0, 0.0, 0.0);
-            for ids in 0..s {
+            for _ in 0..s {
                 let ru = rand::random::<f32>();
                 let rv = rand::random::<f32>();
                 let u = ((idx as f32) + ru )/ x as f32;
@@ -62,7 +74,7 @@ fn main() {
                 //let u = (idx as f32) / x as f32;
                 //let v = (idy as f32) / y as f32;
                 let r = camera.get_ray(u, v);
-                let p = r.point_at_parameter(2.0);
+                //let p = r.point_at_parameter(2.0);
                 col = col + color(r, &mut world);
             }
             col = col / (s as f32);
