@@ -5,6 +5,10 @@ mod ray;
 mod hitable;
 mod sphere;
 mod camera;
+mod util;
+mod material;
+mod lambertian;
+mod metal;
 
 use std::io::prelude::*;
 use std::fs::File;
@@ -16,24 +20,15 @@ use vec3::Vec3;
 use ray::Ray;
 use sphere::Sphere;
 use camera::Camera;
-
-fn rand_in_unit_sphere() -> Vec3<f32> {
-    let v1 = Vec3::new(1.0, 1.0, 1.0);
-    let mut vr = Vec3::new(rand::random::<f32>(),
-                           rand::random::<f32>(),
-                           rand::random::<f32>()) - v1;
-    while vr.dot(vr) >= 1.0 {
-        vr = Vec3::new(rand::random::<f32>(),
-                       rand::random::<f32>(),
-                       rand::random::<f32>()) - v1;
-    }
-    vr
-}
+use util::rand_in_unit_sphere;
+use lambertian::Lambertian;
+use metal::Metal;
 
 fn color<T: Hitable<f32>> (ray:Ray<f32>, world: &mut Vec<T>) -> Vec3<f32> {
-    match hitable::hit_in_list(&ray, 0.0, f32::MAX, world) {
+    match hitable::hit_in_list(&ray, 0.001, f32::MAX, world) {
         Some(rec) => {
             let target = rec.p + rec.normal + rand_in_unit_sphere();
+            //let ( result, scattered, attenuation ) = ::scatter
             0.5 * color( Ray::new(rec.p, target-rec.p), world)
         },
         None => {
@@ -59,9 +54,12 @@ fn main() {
 
     let camera = Camera::new();
 
+    let lambert_1 = Lambertian::new(Vec3::new(0.8, 0.3, 0.3));
+    let lambert_2 = Lambertian::new(Vec3::new(0.8, 0.8, 0.0));
+
     let mut world = Vec::<Sphere<f32>>::new();
-    world.push(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5));
-    world.push(Sphere::new(Vec3::new(0.0,-100.5, -1.0), 100.0));
+    world.push(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5, lambert_1));
+    world.push(Sphere::new(Vec3::new(0.0,-100.5, -1.0), 100.0, lambert_1));
 
     for idy in (0..y).rev() {
         for idx in 0..x {

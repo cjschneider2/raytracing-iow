@@ -46,6 +46,10 @@ impl Vec3<f32> {
          (self.y * other.y) +
          (self.z * other.z) )
     }
+
+    pub fn reflect(self, normal: Vec3<f32>) -> Vec3<f32> {
+        self - 2.0 * self.dot(normal) * normal
+    }
 }
 
 impl Neg for Vec3<f32> {

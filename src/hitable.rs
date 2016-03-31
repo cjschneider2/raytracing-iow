@@ -1,5 +1,6 @@
 use ray::Ray;
 use vec3::Vec3;
+use material::Material;
 
 #[derive (Copy, Clone)]
 pub struct Hit<T> {

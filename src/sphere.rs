@@ -2,19 +2,21 @@ use vec3::Vec3;
 use hitable::Hit;
 use hitable::Hitable;
 use ray::Ray;
+use material::Material;
 
-pub struct Sphere<T> {
+pub struct Sphere<T, M: Material> {
     pub center: Vec3<T>,
     pub radius: T,
+    pub material: M,
 }
 
-impl Sphere<f32> {
-    pub fn new(center: Vec3<f32>, radius: f32) -> Sphere<f32> {
-        Sphere { center: center, radius: radius }
+impl Sphere<f32, T> where T: Material {
+    pub fn new<T: Material>(center: Vec3<f32>, radius: f32, material: T) -> Sphere<f32, T> {
+        Sphere { center: center, radius: radius , material: material }
     }
 }
 
-impl Hitable<f32> for Sphere<f32> {
+impl Hitable<f32> for Sphere<f32, T> where T: Material {
 
     fn hit(&self, ray: &Ray<f32>, t_min: f32, t_max: f32, record: &mut Hit<f32>) -> bool {
         let oc = ray.origin() - self.center;
