@@ -23,6 +23,7 @@ use camera::Camera;
 use util::rand_in_unit_sphere;
 use lambertian::Lambertian;
 use metal::Metal;
+use material::Material;
 
 fn color<T: Hitable<f32>> (ray:Ray<f32>, world: &mut Vec<T>) -> Vec3<f32> {
     match hitable::hit_in_list(&ray, 0.001, f32::MAX, world) {
@@ -57,7 +58,7 @@ fn main() {
     let lambert_1 = Lambertian::new(Vec3::new(0.8, 0.3, 0.3));
     let lambert_2 = Lambertian::new(Vec3::new(0.8, 0.8, 0.0));
 
-    let mut world = Vec::<Sphere<f32>>::new();
+    let mut world = Vec::<Sphere<f32, Lambertian>>::new();
     world.push(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5, lambert_1));
     world.push(Sphere::new(Vec3::new(0.0,-100.5, -1.0), 100.0, lambert_1));
 

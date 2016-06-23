@@ -10,13 +10,13 @@ pub struct Sphere<T, M: Material> {
     pub material: M,
 }
 
-impl Sphere<f32, T> where T: Material {
-    pub fn new<T: Material>(center: Vec3<f32>, radius: f32, material: T) -> Sphere<f32, T> {
+impl <T>Sphere<f32, T> where T: Material {
+    pub fn new (center: Vec3<f32>, radius: f32, material: T) -> Sphere<f32, T> {
         Sphere { center: center, radius: radius , material: material }
     }
 }
 
-impl Hitable<f32> for Sphere<f32, T> where T: Material {
+impl <T>Hitable<f32> for Sphere<f32, T> where T: Material {
 
     fn hit(&self, ray: &Ray<f32>, t_min: f32, t_max: f32, record: &mut Hit<f32>) -> bool {
         let oc = ray.origin() - self.center;

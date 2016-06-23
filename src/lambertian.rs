@@ -4,6 +4,7 @@ use hitable::Hit;
 use material::Material;
 use util::rand_in_unit_sphere;
 
+#[derive(Copy, Clone)]
 pub struct Lambertian {
     pub albedo: Vec3<f32>
 }
