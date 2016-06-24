@@ -5,20 +5,32 @@ use ray::Ray;
 use material::Material;
 
 pub struct Sphere<T, M: Material> {
-    pub center: Vec3<T>,
+    pub center: Vec3,
     pub radius: T,
     pub material: M,
 }
 
 impl <T>Sphere<f32, T> where T: Material {
-    pub fn new (center: Vec3<f32>, radius: f32, material: T) -> Sphere<f32, T> {
+    pub fn new (
+        center: Vec3,
+        radius: f32,
+        material: T
+    ) -> Sphere<f32, T>
+    {
         Sphere { center: center, radius: radius , material: material }
     }
 }
 
-impl <T>Hitable<f32> for Sphere<f32, T> where T: Material {
+impl <T>Hitable for Sphere<f32, T> where T: Material {
 
-    fn hit(&self, ray: &Ray<f32>, t_min: f32, t_max: f32, record: &mut Hit<f32>) -> bool {
+    fn hit(
+        &self,
+        ray: &Ray,
+        t_min: f32,
+        t_max: f32,
+        record: &mut Hit
+    ) -> bool
+    {
         let oc = ray.origin() - self.center;
         let a  = ray.direction().dot(ray.direction());
         let b  = 2.0 * oc.dot(ray.direction());

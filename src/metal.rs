@@ -5,21 +5,21 @@ use material::Material;
 use util::rand_in_unit_sphere;
 
 pub struct Metal {
-    pub albedo: Vec3<f32>
+    pub albedo: Vec3
 }
 
 impl Metal {
-    pub fn new( _albedo: Vec3<f32>) -> Metal {
+    pub fn new( _albedo: Vec3) -> Metal {
         Metal { albedo: _albedo }
     }
 }
 
 impl Material for Metal {
     fn scatter(&self,
-               ray_in: &Ray<f32>,
-               rec: &Hit<f32>,
-               attenuation: &Vec3<f32>,
-               scattered: &Ray<f32>) -> (bool, Ray<f32>, Vec3<f32>)
+               ray_in: &Ray,
+               rec: &Hit,
+               attenuation: &Vec3,
+               scattered: &Ray) -> (bool, Ray, Vec3)
     {
         let reflected = ray_in.direction()
                               .unit_vector()

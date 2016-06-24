@@ -2,10 +2,10 @@ use ray::Ray;
 use vec3::Vec3;
 
 pub struct Camera {
-    ll_corner  : Vec3<f32>,
-    horizontal : Vec3<f32>,
-    vertical   : Vec3<f32>,
-    origin     : Vec3<f32>,
+    ll_corner  : Vec3,
+    horizontal : Vec3,
+    vertical   : Vec3,
+    origin     : Vec3,
 }
 
 impl Camera {
@@ -17,7 +17,7 @@ impl Camera {
             origin     : Vec3::new( 0.0,  0.0,  0.0),
         }
     }
-    pub fn get_ray(&self, u: f32, v:f32) -> Ray<f32> {
+    pub fn get_ray(&self, u: f32, v:f32) -> Ray {
         Ray::new(self.origin,
                  self.ll_corner +
                  u * self.horizontal +

@@ -3,18 +3,24 @@ use vec3::Vec3;
 use material::Material;
 
 #[derive (Copy, Clone)]
-pub struct Hit<T> {
+pub struct Hit {
     pub t: f32,
-    pub p: Vec3<T>,
-    pub normal: Vec3<T>,
+    pub p: Vec3,
+    pub normal: Vec3,
 }
 
-pub trait Hitable<T> {
-    fn hit(&self, ray: &Ray<T>, t_min: f32, t_max: f32, record: &mut Hit<T>) -> bool;
+pub trait Hitable {
+    fn hit(
+        &self,
+        ray: &Ray,
+        t_min: f32,
+        t_max: f32,
+        record: &mut Hit
+    ) -> bool;
 }
 
-impl Hit<f32> {
-    pub fn new() -> Hit<f32> {
+impl Hit {
+    pub fn new() -> Hit {
         Hit {
             t: 0.0,
             p: Vec3::new(0.0, 0.0, 0.0),
@@ -23,10 +29,13 @@ impl Hit<f32> {
     }
 }
 
-pub fn hit_in_list<T: Hitable<f32>> (ray: &Ray<f32>,
-                                   t_min: f32,
-                                   t_max: f32,
-                                   list: &mut Vec<T>) -> Option<Hit<f32>> {
+pub fn hit_in_list<T: Hitable> (
+    ray: &Ray,
+    t_min: f32,
+    t_max: f32,
+    list: &mut Vec<T>
+) -> Option<Hit>
+{
     let mut itr_record = Hit::new();
     let mut ret_record = Hit::new();
     let mut hit_anything = false;

@@ -25,7 +25,7 @@ use lambertian::Lambertian;
 use metal::Metal;
 use material::Material;
 
-fn color<T: Hitable<f32>> (ray:Ray<f32>, world: &mut Vec<T>) -> Vec3<f32> {
+fn color<T: Hitable> (ray:Ray, world: &mut Vec<T>) -> Vec3 {
     match hitable::hit_in_list(&ray, 0.001, f32::MAX, world) {
         Some(rec) => {
             let target = rec.p + rec.normal + rand_in_unit_sphere();
